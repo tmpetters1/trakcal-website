@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TraKcal - Smart Nutrition Tracking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-900: #14532D;
+    --green-800: #166534;
+    --green-700: #15803D;
+    --green-600: #16A34A;
+    --green-500: #22C55E;
+    --green-400: #4ADE80;
+    --green-300: #86EFAC;
+    --green-200: #BBF7D0;
+    --green-100: #DCFCE7;
+    --green-50: #F0FDF4;
+    --gray-950: #030712;
+    --gray-900: #111827;
+    --gray-800: #1F2937;
+    --gray-700: #374151;
+    --gray-600: #4B5563;
+    --gray-500: #6B7280;
+    --gray-400: #9CA3AF;
+    --gray-300: #D1D5DB;
+    --gray-200: #E5E7EB;
+    --gray-100: #F3F4F6;
+    --gray-50: #F9FAFB;
+    --white: #FFFFFF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--gray-900);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    background: #FAFBFC;
+  }
+
+  /* ========== NAV ========== */
+  nav {
+    position: fixed; top: 12px; left: 50%; transform: translateX(-50%); z-index: 100;
+    width: calc(100% - 2rem); max-width: 1100px;
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: saturate(200%) blur(24px); -webkit-backdrop-filter: saturate(200%) blur(24px);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.6);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.03);
+  }
+  .nav-inner {
+    padding: 0 1.75rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; color: var(--gray-900); }
+  .nav-brand svg { width: 30px; height: 30px; border-radius: 7px; }
+  .nav-brand span { font-weight: 800; font-size: 1.05rem; letter-spacing: -0.03em; }
+  .nav-links { display: flex; gap: 1.75rem; align-items: center; }
+  .nav-links a {
+    text-decoration: none; color: var(--gray-500); font-size: 0.85rem; font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gray-900); }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 9px 20px; border-radius: 10px; font-weight: 600; font-size: 0.85rem;
+    text-decoration: none; transition: all 0.25s; cursor: pointer; border: none;
+  }
+  .btn-primary { background: var(--green-600); color: white; }
+  .btn-primary:hover { background: var(--green-700); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(22,163,74,0.25); }
+  .btn-dark { background: var(--gray-950); color: white; }
+  .btn-dark:hover { background: var(--gray-800); transform: translateY(-1px); }
+  .btn-glass {
+    background: rgba(255,255,255,0.6); color: var(--gray-700);
+    border: 1px solid rgba(0,0,0,0.08);
+    backdrop-filter: blur(10px);
+  }
+  .btn-glass:hover { background: rgba(255,255,255,0.9); }
+  .btn-lg { padding: 13px 28px; font-size: 0.92rem; border-radius: 12px; }
+
+  /* ========== HERO ========== */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 10rem 2rem 5rem; text-align: center;
+    position: relative;
+    background: linear-gradient(180deg, #F0FDF4 0%, #FAFBFC 40%, #FAFBFC 100%);
+  }
+  /* Soft ambient blobs */
+  .hero::before {
+    content: ''; position: absolute; top: 80px; left: -100px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(74,222,128,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: ''; position: absolute; top: 200px; right: -150px;
+    width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-content { max-width: 660px; position: relative; z-index: 1; }
+  .hero-icon-row {
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+    margin-bottom: 2rem;
+  }
+  .app-icon-hero {
+    width: 56px; height: 56px; border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(22,101,52,0.15), 0 0 0 1px rgba(22,101,52,0.06);
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.8); color: var(--green-800); padding: 6px 14px;
+    border-radius: 100px; font-size: 0.75rem; font-weight: 700;
+    border: 1px solid rgba(22,101,52,0.12);
+    backdrop-filter: blur(8px);
+    letter-spacing: 0.01em; text-transform: uppercase;
+  }
+  .hero-badge::before {
+    content: ''; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--green-500); display: block;
+  }
+  .hero h1 {
+    font-size: clamp(2.8rem, 6vw, 4rem); font-weight: 900; letter-spacing: -0.045em;
+    line-height: 1.05; margin-bottom: 1.25rem; color: var(--gray-950);
+  }
+  .hero h1 .accent {
+    background: linear-gradient(135deg, var(--green-600), var(--green-400));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero p {
+    font-size: 1.1rem; color: var(--gray-500); max-width: 460px; margin: 0 auto 2.5rem;
+    line-height: 1.7;
+  }
+  .hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  /* ========== TRUST ========== */
+  .trust-strip {
+    padding: 3.5rem 2rem; text-align: center;
+  }
+  .trust-strip-inner { max-width: 800px; margin: 0 auto; }
+  .trust-items { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+  .trust-pill {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.06);
+    padding: 10px 18px; border-radius: 12px;
+    backdrop-filter: blur(8px);
+  }
+  .trust-pill .num { font-size: 1rem; font-weight: 800; color: var(--gray-900); letter-spacing: -0.02em; }
+  .trust-pill .lbl { font-size: 0.8rem; color: var(--gray-400); font-weight: 500; }
+
+  /* ========== FEATURES ========== */
+  .features { padding: 5rem 2rem 7rem; }
+  .features-inner { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--green-600); margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem); font-weight: 900; letter-spacing: -0.04em;
+    margin-bottom: 0.75rem; color: var(--gray-950); line-height: 1.15;
+  }
+  .section-sub {
+    font-size: 1.02rem; color: var(--gray-500); max-width: 440px; margin-bottom: 3rem;
+    line-height: 1.65;
+  }
+  .features-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+  }
+  .feature-card {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-radius: 18px; padding: 2rem 1.75rem;
+    border: 1px solid rgba(255,255,255,0.8);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03), 0 8px 24px rgba(0,0,0,0.03);
+    transition: all 0.3s ease;
+    position: relative; overflow: hidden;
+  }
+  .feature-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--green-400), var(--green-600));
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.07);
+    border-color: rgba(74,222,128,0.2);
+  }
+  .feature-card:hover::before { opacity: 1; }
+  .feature-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.25rem; font-size: 1.1rem;
+  }
+  .feature-icon svg { width: 20px; height: 20px; }
+  .fi-1 { background: linear-gradient(135deg, var(--green-50), var(--green-100)); color: var(--green-700); }
+  .fi-2 { background: linear-gradient(135deg, #EFF6FF, #DBEAFE); color: #2563EB; }
+  .fi-3 { background: linear-gradient(135deg, #F5F3FF, #EDE9FE); color: #7C3AED; }
+  .fi-4 { background: linear-gradient(135deg, #ECFEFF, #CFFAFE); color: #0891B2; }
+  .fi-5 { background: linear-gradient(135deg, #FFFBEB, #FEF3C7); color: #D97706; }
+  .fi-6 { background: linear-gradient(135deg, #FFF1F2, #FFE4E6); color: #E11D48; }
+  .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; letter-spacing: -0.02em; }
+  .feature-card p { font-size: 0.86rem; color: var(--gray-500); line-height: 1.6; }
+
+  /* ========== B2B ========== */
+  .b2b {
+    padding: 7rem 2rem;
+    background: var(--gray-950); color: var(--white);
+    position: relative; overflow: hidden;
+  }
+  .b2b::before {
+    content: ''; position: absolute; top: -200px; left: -200px;
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(22,101,52,0.2) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .b2b::after {
+    content: ''; position: absolute; bottom: -150px; right: -150px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(74,222,128,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .b2b-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+  .b2b .section-label { color: var(--green-400); }
+  .b2b .section-title { color: white; }
+  .b2b .section-sub { color: rgba(255,255,255,0.5); }
+  .b2b-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+
+  .b2b-benefits { list-style: none; display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; }
+  .b2b-benefit {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px; padding: 1.25rem 1.5rem;
+    transition: border-color 0.3s;
+  }
+  .b2b-benefit:hover { border-color: rgba(74,222,128,0.2); }
+  .b2b-icon {
+    width: 36px; height: 36px; border-radius: 9px;
+    background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.15);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .b2b-icon svg { width: 16px; height: 16px; stroke: var(--green-400); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .b2b-benefit h4 { font-size: 0.92rem; font-weight: 700; margin-bottom: 2px; }
+  .b2b-benefit p { font-size: 0.82rem; color: rgba(255,255,255,0.4); line-height: 1.5; }
+
+  /* ========== FORM ========== */
+  .b2b-form {
+    background: rgba(255,255,255,0.04);
+    border-radius: 22px; padding: 2.5rem;
+    border: 1px solid rgba(255,255,255,0.07);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+  .b2b-form h3 { font-size: 1.25rem; font-weight: 800; margin-bottom: 0.4rem; letter-spacing: -0.02em; }
+  .b2b-form > p { font-size: 0.85rem; color: rgba(255,255,255,0.4); margin-bottom: 1.75rem; }
+  .form-group { margin-bottom: 0.9rem; }
+  .form-group label { display: block; font-size: 0.75rem; font-weight: 600; margin-bottom: 5px; color: rgba(255,255,255,0.55); }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 11px 14px; border-radius: 10px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+    color: white; font-size: 0.88rem; font-family: inherit; outline: none;
+    transition: border 0.2s, box-shadow 0.2s;
+  }
+  .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255,255,255,0.2); }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--green-400); box-shadow: 0 0 0 3px rgba(74,222,128,0.08);
+  }
+  .form-group select option { background: var(--gray-900); }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+  .btn-form {
+    width: 100%; padding: 13px; margin-top: 0.5rem;
+    background: var(--green-500); color: var(--gray-950); font-weight: 700; font-size: 0.92rem;
+    border: none; border-radius: 11px; cursor: pointer; transition: all 0.25s;
+    box-shadow: 0 0 20px rgba(34,197,94,0.15);
+  }
+  .btn-form:hover { background: var(--green-400); transform: translateY(-1px); box-shadow: 0 0 30px rgba(34,197,94,0.25); }
+
+  /* ========== PRICING ========== */
+  .pricing { padding: 7rem 2rem; text-align: center; }
+  .pricing-inner { max-width: 1000px; margin: 0 auto; }
+  .pricing .section-sub { margin: 0 auto; }
+  .pricing-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 3.5rem; }
+  .pricing-card {
+    border-radius: 18px; padding: 2.5rem 2rem;
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    text-align: left; transition: all 0.3s; position: relative;
+  }
+  .pricing-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
+  .pricing-card.featured {
+    background: var(--gray-950); color: var(--white);
+    border-color: transparent;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+  }
+  .pricing-card.featured::before {
+    content: 'Best Value'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--green-500), var(--green-600)); color: white;
+    font-size: 0.68rem; font-weight: 700; padding: 3px 12px; border-radius: 100px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .pricing-card .tier { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green-600); margin-bottom: 0.75rem; }
+  .pricing-card.featured .tier { color: var(--green-400); }
+  .pricing-card .price { font-size: 2.2rem; font-weight: 900; letter-spacing: -0.05em; margin-bottom: 0.2rem; }
+  .pricing-card .price span { font-size: 0.88rem; font-weight: 500; color: var(--gray-400); }
+  .pricing-card.featured .price span { color: rgba(255,255,255,0.35); }
+  .pricing-card .desc { font-size: 0.84rem; color: var(--gray-500); margin-bottom: 1.75rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(0,0,0,0.06); }
+  .pricing-card.featured .desc { color: rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.08); }
+  .pricing-card ul { list-style: none; margin-bottom: 2rem; }
+  .pricing-card ul li { padding: 5px 0; font-size: 0.86rem; color: var(--gray-600); display: flex; align-items: center; gap: 10px; }
+  .pricing-card.featured ul li { color: rgba(255,255,255,0.7); }
+  .check-icon {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--green-50); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .pricing-card.featured .check-icon { background: rgba(74,222,128,0.12); }
+  .check-icon svg { width: 10px; height: 10px; stroke: var(--green-600); }
+  .pricing-card.featured .check-icon svg { stroke: var(--green-400); }
+
+  /* ========== FOOTER ========== */
+  footer {
+    padding: 3rem 2rem; text-align: center; font-size: 0.82rem; color: var(--gray-400);
+    border-top: 1px solid rgba(0,0,0,0.04);
+  }
+  footer a { color: var(--gray-500); text-decoration: none; }
+  footer a:hover { color: var(--gray-900); }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 900px) {
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+    .pricing-cards { grid-template-columns: repeat(2, 1fr); max-width: 760px; margin-left: auto; margin-right: auto; }
+  }
+  @media (max-width: 768px) {
+    nav { top: 8px; width: calc(100% - 1rem); }
+    .nav-links { display: none; }
+    .b2b-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .hero { padding: 8rem 1.5rem 4rem; }
+    .hero h1 { font-size: 2.4rem; }
+    .features-grid { grid-template-columns: 1fr; }
+    .pricing-cards { grid-template-columns: 1fr; max-width: 380px; }
+    .trust-items { gap: 0.75rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV — floating pill -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">
+      <svg viewBox="0 0 1024 1024">
+        <defs><linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#166534"/><stop offset="100%" stop-color="#14532D"/></linearGradient><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#86EFAC"/><stop offset="100%" stop-color="#4ADE80"/></linearGradient></defs>
+        <rect width="1024" height="1024" rx="224" fill="url(#bg)"/><circle cx="512" cy="512" r="320" fill="none" stroke="#1A5C2E" stroke-width="60"/><circle cx="512" cy="512" r="320" fill="none" stroke="url(#rg)" stroke-width="60" stroke-dasharray="2010" stroke-dashoffset="500" stroke-linecap="round" transform="rotate(-90 512 512)"/><g transform="translate(512 490)"><path d="M0-80Q80-80 100 0Q100 80 0 120Q-100 80-100 0Q-80-80 0-80Z" fill="#4ADE80" opacity="0.2"/><polyline points="-50,10 -15,50 60,-40" fill="none" stroke="#86EFAC" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/></g>
+      </svg>
+      <span>TraKcal</span>
+    </a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#business">For Business</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact" class="btn btn-primary">Get Started</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-icon-row">
+      <svg class="app-icon-hero" viewBox="0 0 1024 1024">
+        <defs><linearGradient id="bgh" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#166534"/><stop offset="100%" stop-color="#14532D"/></linearGradient><linearGradient id="rgh" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#86EFAC"/><stop offset="100%" stop-color="#4ADE80"/></linearGradient></defs>
+        <rect width="1024" height="1024" rx="224" fill="url(#bgh)"/><circle cx="512" cy="512" r="320" fill="none" stroke="#1A5C2E" stroke-width="60"/><circle cx="512" cy="512" r="320" fill="none" stroke="url(#rgh)" stroke-width="60" stroke-dasharray="2010" stroke-dashoffset="500" stroke-linecap="round" transform="rotate(-90 512 512)"/><g transform="translate(512 490)"><path d="M0-80Q80-80 100 0Q100 80 0 120Q-100 80-100 0Q-80-80 0-80Z" fill="#4ADE80" opacity="0.2"/><polyline points="-50,10 -15,50 60,-40" fill="none" stroke="#86EFAC" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/></g>
+      </svg>
+      <div class="hero-badge">Available on iOS</div>
+    </div>
+    <h1>Nutrition tracking<br><span class="accent">made simple.</span></h1>
+    <p>Track calories, macros, and water intake with a beautifully designed app. Scan barcodes, build meals, and reach your goals.</p>
+    <div class="hero-cta">
+      <a href="#" class="btn btn-dark btn-lg">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Download on App Store
+      </a>
+      <a href="#business" class="btn btn-glass btn-lg">For Business</a>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST PILLS -->
+<section class="trust-strip">
+  <div class="trust-strip-inner">
+    <div class="trust-items">
+      <div class="trust-pill"><span class="num">30s</span><span class="lbl">avg log time</span></div>
+      <div class="trust-pill"><span class="num">10K+</span><span class="lbl">foods</span></div>
+      <div class="trust-pill"><span class="num">100%</span><span class="lbl">privacy first</span></div>
+      <div class="trust-pill"><span class="num">Native</span><span class="lbl">Swift iOS</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="features-inner">
+    <div class="section-label">Features</div>
+    <div class="section-title">Everything you need to stay on track.</div>
+    <div class="section-sub">From quick barcode scans to detailed macro breakdowns, TraKcal has you covered.</div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon fi-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+        <h3>Barcode Scanning</h3>
+        <p>Instantly log food by scanning any barcode. Pulls nutrition data from a massive database.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <h3>Macro Tracking</h3>
+        <p>Visual ring indicators for protein, carbs, and fat. Know exactly where you stand.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <h3>Weekly Insights</h3>
+        <p>Charts and summaries that show trends over time. Celebrate streaks and improve.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></div>
+        <h3>Water Tracking</h3>
+        <p>Log water intake with quick-tap buttons. Stay hydrated and build the habit.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+        <h3>Saved Meals</h3>
+        <p>Build custom meals from favorites and reuse them. Log breakfast in two taps.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <h3>Apple Health Sync</h3>
+        <p>Two-way sync with Apple Health. Calories, macros, weight, and activity in one place.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- B2B -->
+<section class="b2b" id="business">
+  <div class="b2b-inner">
+    <div class="b2b-grid">
+      <div>
+        <div class="section-label">For Business</div>
+        <div class="section-title">Your brand.<br>Our technology.</div>
+        <div class="section-sub">White-label TraKcal for your coaching business, gym, or health brand. Give your clients a premium nutrition app with your identity.</div>
+        <ul class="b2b-benefits">
+          <li class="b2b-benefit">
+            <div class="b2b-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+            <div><h4>Custom Branding</h4><p>Your logo, colors, app icon. Clients see your brand, not ours.</p></div>
+          </li>
+          <li class="b2b-benefit">
+            <div class="b2b-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            <div><h4>Client Management</h4><p>Distribute codes, set nutrition targets, monitor progress.</p></div>
+          </li>
+          <li class="b2b-benefit">
+            <div class="b2b-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+            <div><h4>No Development Needed</h4><p>Launch in days, not months. We handle all the technology.</p></div>
+          </li>
+          <li class="b2b-benefit">
+            <div class="b2b-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+            <div><h4>Revenue Sharing</h4><p>Earn from client subscriptions. A new income stream.</p></div>
+          </li>
+        </ul>
+      </div>
+      <div class="b2b-form" id="contact">
+        <h3>Get in touch</h3>
+        <p>Tell us about your business and we'll reach out within 24 hours.</p>
+        <form onsubmit="event.preventDefault(); alert('Thank you! We\'ll be in touch soon.');">
+          <div class="form-row">
+            <div class="form-group"><label>First Name</label><input type="text" placeholder="John" required></div>
+            <div class="form-group"><label>Last Name</label><input type="text" placeholder="Doe" required></div>
+          </div>
+          <div class="form-group"><label>Business Email</label><input type="email" placeholder="john@yourbusiness.com" required></div>
+          <div class="form-group"><label>Company / Brand Name</label><input type="text" placeholder="Your business name" required></div>
+          <div class="form-group"><label>Business Type</label>
+            <select required><option value="" disabled selected>Select your business type</option><option>Personal Trainer / Coach</option><option>Gym / Fitness Center</option><option>Nutritionist / Dietitian</option><option>Health & Wellness Brand</option><option>Corporate Wellness</option><option>Other</option></select>
+          </div>
+          <div class="form-group"><label>Number of Clients</label>
+            <select><option value="" disabled selected>Select range</option><option>1 - 25</option><option>26 - 100</option><option>101 - 500</option><option>500+</option></select>
+          </div>
+          <div class="form-group"><label>Message (optional)</label><textarea placeholder="Tell us about your needs..."></textarea></div>
+          <button type="submit" class="btn-form">Send Inquiry</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="pricing-inner">
+    <div class="section-label">Pricing</div>
+    <div class="section-title">Simple, transparent pricing.</div>
+    <div class="section-sub">Start with a free trial. Upgrade when you're ready.</div>
+    <div class="pricing-cards">
+      <div class="pricing-card">
+        <div class="tier">Free Trial</div>
+        <div class="price">$0 <span>/ 7 days</span></div>
+        <div class="desc">Try everything, no commitment.</div>
+        <ul>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="6,12 10,16 18,8"/></svg></span>Full feature access</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="6,12 10,16 18,8"/></svg></span>Barcode scanning</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="6,12 10,16 18,8"/></svg></span>Macro & calorie tracking</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="6,12 10,16 18,8"/></svg></span>Apple Health sync</li>
+        </ul>
+        <a href="#" class="btn btn-glass" style="width:100%;">Start Free Trial</a>
+      </div>
+      <div class="pricing-card">
+        <div class="tier">Monthly</div>
+        <div class="price">$3.99 <span>/ month</span></div>
+        <div class="desc">Full access, cancel anytime.</div>
+        <ul>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="6,12 10,16 18,8"/></svg></span>Everything in Free Trial</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="6,12 10,16 18,8"/></svg></span>Saved meals & favorites</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="6,12 10,16 18,8"/></svg></span>Weekly insights & charts</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="6,12 10,16 18,8"/></svg></span>Water & weight tracking</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="6,12 10,16 18,8"/></svg></span>Cancel anytime</li>
+        </ul>
+        <a href="#" class="btn btn-glass" style="width:100%;">Subscribe Monthly</a>
+      </div>
+      <div class="pricing-card featured">
+        <div class="tier">Yearly</div>
+        <div class="price">$29.99 <span>/ year</span></div>
+        <div class="desc">Best value — save 37% vs monthly.</div>
+        <ul>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="6,12 10,16 18,8"/></svg></span>Everything in Monthly</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="6,12 10,16 18,8"/></svg></span>Just $2.50/month</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="6,12 10,16 18,8"/></svg></span>All future updates</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="6,12 10,16 18,8"/></svg></span>Priority support</li>
+        </ul>
+        <a href="#" class="btn btn-primary" style="width:100%;">Get Yearly</a>
+      </div>
+      <div class="pricing-card">
+        <div class="tier">Lifetime</div>
+        <div class="price">$99.99 <span>once</span></div>
+        <div class="desc">Pay once, use forever.</div>
+        <ul>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="6,12 10,16 18,8"/></svg></span>Everything in Yearly</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="6,12 10,16 18,8"/></svg></span>All future updates</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="6,12 10,16 18,8"/></svg></span>No recurring charges</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><polyline points="6,12 10,16 18,8"/></svg></span>One-time payment</li>
+        </ul>
+        <a href="#" class="btn btn-glass" style="width:100%;">Buy Lifetime</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>&copy; 2026 TraKcal &nbsp;&middot;&nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="terms.html">Terms of Service</a></p>
+</footer>
+
+</body>
+</html>

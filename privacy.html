@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy - TraKcal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #111827; line-height: 1.7; background: #FAFBFC;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 720px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+  .back { display: inline-flex; align-items: center; gap: 6px; color: #16A34A; text-decoration: none; font-size: 0.85rem; font-weight: 600; margin-bottom: 2rem; }
+  .back:hover { color: #15803D; }
+  h1 { font-size: 2rem; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+  .updated { font-size: 0.82rem; color: #6B7280; margin-bottom: 2.5rem; }
+  h2 { font-size: 1.15rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+  p, li { font-size: 0.92rem; color: #374151; margin-bottom: 0.75rem; }
+  ul { padding-left: 1.5rem; margin-bottom: 1rem; }
+  li { margin-bottom: 0.4rem; }
+  footer { text-align: center; padding: 2rem; font-size: 0.82rem; color: #9CA3AF; border-top: 1px solid rgba(0,0,0,0.04); }
+  footer a { color: #6B7280; text-decoration: none; }
+  footer a:hover { color: #111827; }
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="back">&larr; Back to TraKcal</a>
+  <h1>Privacy Policy</h1>
+  <p class="updated">Last updated: March 11, 2026</p>
+
+  <p>TraKcal ("we", "our", or "the app") is committed to protecting your privacy. This policy explains what data we collect, how we use it, and your rights.</p>
+
+  <h2>1. Data We Collect</h2>
+  <p><strong>Data you provide:</strong></p>
+  <ul>
+    <li>Food entries, meal logs, calorie and macro targets you set within the app</li>
+    <li>Water intake and weight entries</li>
+    <li>Custom foods and saved meals you create</li>
+  </ul>
+  <p><strong>Data collected automatically:</strong></p>
+  <ul>
+    <li>A random device identifier stored in your device's Keychain (used for code redemption and license validation only)</li>
+    <li>Trial start date (stored locally in Keychain)</li>
+  </ul>
+
+  <h2>2. Data We Do NOT Collect</h2>
+  <ul>
+    <li>We do not collect your name, email address, or any personal contact information</li>
+    <li>We do not use analytics or tracking SDKs</li>
+    <li>We do not collect location data</li>
+    <li>We do not serve advertisements or share data with ad networks</li>
+  </ul>
+
+  <h2>3. Where Your Data Is Stored</h2>
+  <p>All nutrition data (food logs, meals, targets) is stored locally on your device and optionally synced via iCloud using Apple's CloudKit framework. We do not have access to your iCloud data.</p>
+  <p>If you redeem a promotional code, your anonymous device identifier and the code are sent to our server (hosted on Supabase) solely to validate the redemption. No nutrition or health data is transmitted.</p>
+
+  <h2>4. Apple Health Integration</h2>
+  <p>If you grant permission, TraKcal can read from and write to Apple Health (HealthKit). This data stays on your device and in Apple's ecosystem. We never access, transmit, or store your HealthKit data on any external server.</p>
+
+  <h2>5. Third-Party Services</h2>
+  <ul>
+    <li><strong>Open Food Facts:</strong> When you scan a barcode, the barcode number is sent to the Open Food Facts API to retrieve nutrition data. No personal information is included in these requests.</li>
+    <li><strong>Supabase:</strong> Used solely for promotional code validation. Only your anonymous device ID and the redemption code are transmitted.</li>
+    <li><strong>Apple StoreKit:</strong> In-app purchases are processed entirely by Apple. We do not receive or store payment information.</li>
+  </ul>
+
+  <h2>6. Data Retention</h2>
+  <p>Your nutrition data persists on your device until you delete it or uninstall the app. Keychain-stored data (trial dates, device ID, redemption status) persists across reinstalls but can be cleared by resetting your device.</p>
+
+  <h2>7. Children's Privacy</h2>
+  <p>TraKcal is not directed at children under 13. We do not knowingly collect data from children.</p>
+
+  <h2>8. Your Rights</h2>
+  <p>Since we store virtually no personal data on our servers, there is minimal data to request or delete. You can delete all local app data by uninstalling the app. To request deletion of any server-side redemption records, contact us at the email below.</p>
+
+  <h2>9. Changes to This Policy</h2>
+  <p>We may update this policy from time to time. Changes will be reflected on this page with an updated date.</p>
+
+  <h2>10. Contact</h2>
+  <p>If you have questions about this privacy policy, contact us at: <strong>support@trakcal.com</strong></p>
+</div>
+<footer>
+  <p>&copy; 2026 TraKcal &nbsp;&middot;&nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="terms.html">Terms of Service</a></p>
+</footer>
+</body>
+</html>
