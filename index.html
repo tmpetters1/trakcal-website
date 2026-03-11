@@ -479,20 +479,20 @@
       <div class="b2b-form" id="contact">
         <h3>Get in touch</h3>
         <p>Tell us about your business and we'll reach out within 24 hours.</p>
-        <form onsubmit="event.preventDefault(); alert('Thank you! We\'ll be in touch soon.');">
+        <form action="https://formspree.io/f/mnjgdwnl" method="POST">
           <div class="form-row">
-            <div class="form-group"><label>First Name</label><input type="text" placeholder="John" required></div>
-            <div class="form-group"><label>Last Name</label><input type="text" placeholder="Doe" required></div>
+            <div class="form-group"><label>First Name</label><input type="text" name="first_name" placeholder="John" required></div>
+            <div class="form-group"><label>Last Name</label><input type="text" name="last_name" placeholder="Doe" required></div>
           </div>
-          <div class="form-group"><label>Business Email</label><input type="email" placeholder="john@yourbusiness.com" required></div>
-          <div class="form-group"><label>Company / Brand Name</label><input type="text" placeholder="Your business name" required></div>
+          <div class="form-group"><label>Business Email</label><input type="email" name="email" placeholder="john@yourbusiness.com" required></div>
+          <div class="form-group"><label>Company / Brand Name</label><input type="text" name="company" placeholder="Your business name" required></div>
           <div class="form-group"><label>Business Type</label>
-            <select required><option value="" disabled selected>Select your business type</option><option>Personal Trainer / Coach</option><option>Gym / Fitness Center</option><option>Nutritionist / Dietitian</option><option>Health & Wellness Brand</option><option>Corporate Wellness</option><option>Other</option></select>
+            <select name="business_type" required><option value="" disabled selected>Select your business type</option><option>Personal Trainer / Coach</option><option>Gym / Fitness Center</option><option>Nutritionist / Dietitian</option><option>Health & Wellness Brand</option><option>Corporate Wellness</option><option>Other</option></select>
           </div>
           <div class="form-group"><label>Number of Clients</label>
-            <select><option value="" disabled selected>Select range</option><option>1 - 25</option><option>26 - 100</option><option>101 - 500</option><option>500+</option></select>
+            <select name="num_clients"><option value="" disabled selected>Select range</option><option>1 - 25</option><option>26 - 100</option><option>101 - 500</option><option>500+</option></select>
           </div>
-          <div class="form-group"><label>Message (optional)</label><textarea placeholder="Tell us about your needs..."></textarea></div>
+          <div class="form-group"><label>Message (optional)</label><textarea name="message" placeholder="Tell us about your needs..."></textarea></div>
           <button type="submit" class="btn-form">Send Inquiry</button>
         </form>
       </div>
